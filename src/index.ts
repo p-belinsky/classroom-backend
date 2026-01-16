@@ -1,9 +1,24 @@
 import express from 'express';
+import subjectsRouter from "./routes/subjects";
+import cors from 'cors';
 
 const app = express();
 const port = 8000;
 
+const frontendUrl = process.env.FRONTEND_URL;
+if(!frontendUrl) throw new Error(
+  'FRONTEND_URL is not set in .env file'
+)
+
+app.use(cors({
+  origin: frontendUrl,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}))
+
 app.use(express.json());
+
+app.use('/api/subjects', subjectsRouter)
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Classroom API!' });
