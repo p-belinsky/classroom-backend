@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
-import {db} from "../db";
+import {db} from "../db/index.js";
 import {drizzleAdapter} from "better-auth/adapters/drizzle";
-import * as schema from "../db/schema/auth";
+import * as schema from "../db/schema/auth.js";
 export const auth = betterAuth({
     secret: process.env.BETTER_AUTH_SECRET!,
     trustedOrigins: [process.env.FRONTEND_URL!],
