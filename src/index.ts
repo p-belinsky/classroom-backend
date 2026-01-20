@@ -2,7 +2,9 @@ import AgentApi from "apminsight";
 AgentApi.config()
 
 import express from 'express';
+import classesRouter from "./routes/classes.js";
 import subjectsRouter from "./routes/subjects.js";
+import usersRouter from "./routes/users.js";
 import cors from 'cors';
 import securityMiddleware from "./middleware/security.js";
 import {auth} from "./lib/auth.js";
@@ -30,6 +32,8 @@ app.use(express.json());
 app.use(securityMiddleware);
 
 app.use('/api/subjects', subjectsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/classes', classesRouter)
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Classroom API!' });
