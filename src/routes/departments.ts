@@ -1,7 +1,7 @@
 import express from "express";
 import {desc, getTableColumns} from "drizzle-orm";
 import {departments} from "../db/schema/index.js";
-import {db} from "../db";
+import {db} from "../db/index.js";
 
 const router = express.Router();
 
