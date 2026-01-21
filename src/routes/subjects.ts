@@ -26,8 +26,7 @@ router.get("/", async (req, res) => {
         }
 
         if(department){
-            const deptPattern = `%${String(department).replace(/[%_]/g, '\\$&')}%`
-            filterConditions.push(ilike(departments.name, deptPattern ))
+            filterConditions.push(eq(subjects.departmentId, parseInt(department as string, 10)))
         }
 
         const whereClause = filterConditions.length > 0 ? and (...filterConditions) : undefined;
