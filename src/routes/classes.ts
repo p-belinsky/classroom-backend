@@ -2,6 +2,7 @@ import express from "express";
 import {db} from "../db/index.js";
 import {classes, subjects, user, departments} from "../db/schema/index.js";
 import {and, desc, eq, getTableColumns, ilike, or, sql} from "drizzle-orm";
+import {authMiddleware, roleMiddleware} from "../middleware/auth.js";
 
 
 
@@ -101,7 +102,7 @@ router.get('/:id', async (req, res) => {
 
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, roleMiddleware(['teacher', 'admin']), async (req, res) => {
     try {
         const {name, teacherId, subjectId, capacity, description, status, bannerUrl, bannerCldPubId} = req.body;
         const [createdClass] = await db

@@ -2,6 +2,7 @@ import express from "express";
 import {departments, subjects} from "../db/schema/index.js";
 import {and, desc, eq, getTableColumns, ilike, or, sql} from "drizzle-orm";
 import { db } from "../db/index.js";
+import {authMiddleware, roleMiddleware} from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -67,6 +68,23 @@ router.get("/", async (req, res) => {
     }catch (error){
         console.error(`GET /subjects error: ${error}`);
         res.status(500).json({error: 'Failed to get subjects'})
+    }
+})
+
+router.post("/", authMiddleware, roleMiddleware(['teacher', 'admin']), async (req, res) => {
+    try {
+        const {name, code, description, departmentId} = req.body;
+        const [createdSubject] = await db
+            .insert(subjects)
+            .values({name, code, description, departmentId})
+            .returning({id: subjects.id});
+
+        if(!createdSubject) throw Error;
+
+        res.status(201).json({data: createdSubject});
+    }catch (error){
+        console.error(`POST /subjects error: ${error}`);
+        res.status(500).json({error: 'Failed to create subject'})
     }
 })
 
